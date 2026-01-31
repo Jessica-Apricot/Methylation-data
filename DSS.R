@@ -4,6 +4,8 @@
 library(DSS)
 library(bsseq)
 
+
+
 #Use file.list 
 Files <- lapply(file.list, function(f)
   read.table(gzfile(f), header = FALSE)
@@ -29,12 +31,16 @@ dss07 <- data.frame(
     X   = sample07[,5]
   )
 
+rm(sample07)
+
 dss08 <- data.frame(
   chr = sample08[,1],
   pos = sample08[,2],
   N   = sample08[,5] + sample08[,6],
   X   = sample08[,5]
 )
+
+rm(sample08)
 
 dss09 <- data.frame(
   chr = sample09[,1],
@@ -43,12 +49,16 @@ dss09 <- data.frame(
   X   = sample09[,5]
 )
 
+rm(sample09)
+
 dss10 <- data.frame(
   chr = sample10[,1],
   pos = sample10[,2],
   N   = sample10[,5] + sample10[,6],
   X   = sample10[,5]
 )
+
+rm(sample10)
 
 dss11 <- data.frame(
   chr = sample11[,1],
@@ -57,12 +67,16 @@ dss11 <- data.frame(
   X   = sample11[,5]
 )
 
+rm(sample11)
+
 dss12 <- data.frame(
   chr = sample12[,1],
   pos = sample12[,2],
   N   = sample12[,5] + sample12[,6],
   X   = sample12[,5]
 )
+
+rm(sample12)
 
 
 
@@ -90,7 +104,7 @@ dmlTest <- DMLtest(
 
 dmrs <- callDMR(
   dmlTest, 
-  p.threshold = 1e-5,
+  p.threshold = 0.00001, 
   delta = 0,
   minlen= 50,
   minCG = 5

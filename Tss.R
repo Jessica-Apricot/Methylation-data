@@ -1,5 +1,7 @@
 library(GenomicRanges)
 library(rtracklayer)
+library(dplyr)
+library(tidyr)
 
 
 
@@ -42,3 +44,20 @@ TSS_windows_filtered <- read.table(
   stringsAsFactors = FALSE
 )
 
+#Make the TSS filtered table shorter
+
+TSS_filtered_clean <- TSS_windows_filtered %>% 
+  select(gene_id = ID, X07, X08, X09, X10, X11, X12)
+
+TSS_filtered_clean_pi<- TSS_filtered_clean %>%
+  pivot_longer(
+    cols = X07:X12,
+    names_to = "sample",
+    values_to = "TSS_methylation"
+  )
+
+TSS_DEG_merged_F1 <- TSS_filtered_clean_pi %>%
+  left_join(Seqmonk_Gonad_F1, by = 'gene_id')
+
+TSS_DEG_merged_F0 <-TSS_filtered_clean_pi %>%
+  left_join(Seqmonk_Gonad_HD, by = 'gene_id')
