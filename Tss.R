@@ -59,5 +59,7 @@ TSS_filtered_clean_pi<- TSS_filtered_clean %>%
 TSS_DEG_merged_F1 <- TSS_filtered_clean_pi %>%
   left_join(Seqmonk_Gonad_F1, by = 'gene_id')
 
+
+
 TSS_DEG_merged_F0 <-TSS_filtered_clean_pi %>%
   left_join(Seqmonk_Gonad_HD, by = 'gene_id')
