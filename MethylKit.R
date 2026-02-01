@@ -27,7 +27,8 @@ Meth_list <- lapply(1:length(file.list), function(i) {
     assembly = "GRCz11",
     treatment = treatment[i],
     context = "CpG",
-    pipeline = "bismarkCoverage"
+    pipeline = "bismarkCoverage",
+    mincov = 10
   )
 })
 
@@ -131,6 +132,38 @@ Hypo_Diff_Meth25_LS <- getMethylDiff(Diff_Meth_LS, difference=25, qvalue=0.01, t
 ## Annotating
 
 library(GenomicRanges)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 df07 <- getData(Meth_list[[1]])
 
