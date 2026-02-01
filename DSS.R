@@ -110,14 +110,19 @@ dmrs <- callDMR(
   minCG = 5
 )
 
+dmr25 <- dmrs[abs(dmrs$diff.Methy) >= 0.25, ]
+
+
 write.table(dmrs, 
             file = "DSS_DMR",
             sep =  "\t",
             quote = FALSE,
             row.names = FALSE)
 
-control <- c(82.3597, 82.8544, 82.4065)
-treatment <- c(82.5454, 81.8694, 82.1792)
+write.table(dmr25,
+            file = "DSS_DMR_25",
+            sep =  "\t",
+            quote = FALSE,
+            row.names = FALSE)
 
-t.test(control, treatment)
 
