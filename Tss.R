@@ -42,11 +42,21 @@ tss_window$gene_id <- as.character(tss_window$gene_id)
 #Bring the TSS windows to seqmonk, and filter using read counts to those with only greater than 20 reads
 
 TSS_windows_filtered <- read.table(
-  "C:/Users/Jessi/OneDrive/Desktop/Annotated Probe Report for TSS.txt",
+  "C:/Users/Jessi/OneDrive/Desktop/Methylation-data/Annotated Probe Reports/Annotated Probe Report for TSS.txt",
   header = TRUE,
   sep = "\t",
   stringsAsFactors = FALSE
 )
+
+
+TSS_windows_filtered$mean_meth <- rowMeans(
+  TSS_windows_filtered[, c("X07","X08","X09","X10","X11","X12")],
+  na.rm = TRUE   # ignore NAs
+)
+sum(!is.na(TSS_windows_filtered$mean_meth))
+
+summary(TSS_windows_filtered$mean_meth[!is.na(TSS_windows_filtered$mean_meth)])
+
 
 #Make the TSS filtered table shorter
 
