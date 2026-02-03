@@ -27,6 +27,8 @@ export(tss_window, "TSS_windows.bed")
 Seqmonk_Gonad_HD <- read.table("C:/Users/Jessi/Documents/Microplastics_RNA-seq/Seqmonk_Gonad_HD.tsv")
 Seqmonk_Gonad_F1 <- read.table("C:/Users/Jessi/Documents/Microplastics_RNA-seq/Seqmonk_Gonad_F1.tsv")
 
+APR_DSS_DMR <- read.table("C:/Users/Jessi/OneDrive/Desktop/Methylation-data/Annotated probe Reports/Annotated Probe Report for DSS_DMR.txt")
+
 Seqmonk_Gonad_HD$gene_id <- rownames(Seqmonk_Gonad_HD)
 
 Seqmonk_Gonad_F1$gene_id <- rownames(Seqmonk_Gonad_F1)
@@ -35,6 +37,8 @@ Seqmonk_Gonad_HD$gene_id <- as.character(Seqmonk_Gonad_HD$gene_id)
 tss_window$gene_id <- as.character(tss_window$gene_id)
 
 
+
+#This didnt work ignore
 #Bring the TSS windows to seqmonk, and filter using read counts to those with only greater than 20 reads
 
 TSS_windows_filtered <- read.table(
@@ -56,10 +60,10 @@ TSS_filtered_clean_pi<- TSS_filtered_clean %>%
     values_to = "TSS_methylation"
   )
 
-TSS_DEG_merged_F1 <- TSS_filtered_clean_pi %>%
+#TSS_DEG_merged_F1 <- TSS_filtered_clean_pi %>%
   left_join(Seqmonk_Gonad_F1, by = 'gene_id')
 
 
 
-TSS_DEG_merged_F0 <-TSS_filtered_clean_pi %>%
+#TSS_DEG_merged_F0 <-TSS_filtered_clean_pi %>%
   left_join(Seqmonk_Gonad_HD, by = 'gene_id')
