@@ -138,9 +138,12 @@ colnames(APR_DSS_DMR)
 colnames(Seqmonk_Gonad_F1)
 colnames(dmrs)
 
-F1_common_genes <- intersect(APR_DSS_DMR$Feature, Seqmonk_Gonad_F1$gene_id)
-F0_common_genes <-intersect(APR_DSS_DMR$Feature, Seqmonk_Gonad_HD$gene_id)
+#Creating tables with Gonad DEGs and DSS DMRs
 
+F1_common_genes <- intersect(APR_DSS_DMR$Feature, Seqmonk_Gonad_F1$gene_id)
+F0_HD_common_genes <-intersect(APR_DSS_DMR$Feature, Seqmonk_Gonad_HD$gene_id)
+
+#Making a GRanges object for the annotated probe report of the DSS DMR (which associate the DMRs with the nearest gene)
 annot_gr <- GRanges(
   seqnames = APR_DSS_DMR$Chr,
   ranges = IRanges(
@@ -150,6 +153,7 @@ annot_gr <- GRanges(
   Gene = APR_DSS_DMR$Feature
 )
 
+#Make a GRanges of the original DSS object, as making probe reports excludes some information we want, i.e diff.methyl
 dmrs_gr <- GRanges(
   seqnames = dmrs$chr,
   ranges = IRanges(
@@ -159,6 +163,7 @@ dmrs_gr <- GRanges(
   diff.methyl = dmrs$diff.Methy
 )
 
+#Applying the missing info from the original object to the probe report
 Overlap <- findOverlaps(annot_gr, dmrs_gr)
 
 DMR_full <- APR_DSS_DMR[queryHits(Overlap), ] %>%
@@ -166,7 +171,7 @@ DMR_full <- APR_DSS_DMR[queryHits(Overlap), ] %>%
     diff.Methyl = dmrs$diff.Methy[subjectHits(Overlap)]
   )
 
-
+#Subsetting the full probe report + DSS object, to get only the columns we want
 DMR_Full_cols <- c(
   "Chromosome",
   "Start",
@@ -176,28 +181,26 @@ DMR_Full_cols <- c(
   "diff.Methyl"
 )
 
-colnames(DMR_full)
-
-
 DSS_DMR_subset <- DMR_full[, DMR_Full_cols]
 
-#Some of the genes in this table have rrepeats
+#The joined genes and DMR table
 Gonad_HD_DSS <- Seqmonk_Gonad_HD %>%
   inner_join(DSS_DMR_subset, by = c("gene_id" = "Feature"))
 
-#So to get the total number of genes 
+#Some of the genes in this table have repeats, so make a table to check how many have multiple So to get the total number of genes 
 No_repeats_Gonad_HD_DSS <- Gonad_HD_DSS %>%
   group_by(gene_id) %>%
   slice_max(order_by = abs(diff.Methyl), n = 1) %>%
   ungroup()
 
+#Write the table (with repeat genes) into excel 
 write.xlsx(
  Gonad_HD_DSS,
   file = "Gonad_HD_DSS.xlsx",
   rowNames = TRUE
 )
 
-
+#Does the methylation make biological sense, with the current knowledge about how methylation relates to the expresssion level
 Methylation_comp <- Gonad_HD_DSS %>%
   mutate(
     Meth_dir = case_when(
@@ -209,4 +212,92 @@ Methylation_comp <- Gonad_HD_DSS %>%
 
 table(Methylation_comp$ExpressionGroup, Methylation_comp$Meth_dir)
 
+### Lets try with the other samples ###
 
+
+#Brain F1
+Brain_F1 <- read.csv("C:/Users/Jessi/OneDrive/Desktop/Methylation-data/Gene tables/Br_res_s_F1.csv")
+
+colnames(Brain_F1)
+
+Brain_F1_cols <- c(
+  "X",
+  "log2FoldChange",
+  "padj"
+)
+
+Brain_F1_subset <- Brain_F1[, Brain_F1_cols]
+
+Brain_F1_DSS <- Brain_F1_subset %>%
+  inner_join(DSS_DMR_subset, by = c("X" = "Feature"))
+
+#Write the table into excel 
+write.xlsx(
+  Brain_F1_DSS,
+  file = "Meth_Gene Tables/Brain_F1_DSS.xlsx",
+  rowNames = TRUE
+)
+
+#Brain HD
+Brain_F0_HD <- read.csv("C:/Users/Jessi/OneDrive/Desktop/Methylation-data/Gene tables/Br_res_s_HD.csv")
+
+
+gene_cols <- c(
+  "X",
+  "log2FoldChange",
+  "padj"
+)
+
+Brain_F0_HD_subset <- Brain_F0_HD[, gene_cols]
+
+#0 genes!!! 
+Brain_F0_HD_DSS <- Brain_F0_HD_subset %>%
+  inner_join(DSS_DMR_subset, by = c("X" = "Feature"))
+
+#Gonad HL
+Gonad_F0_HL <- read.csv("C:/Users/Jessi/OneDrive/Desktop/Methylation-data/Gene tables/Go_res_s_HL.csv")
+
+
+Gonad_F0_HL_subset <- Gonad_F0_HL[, gene_cols]
+
+# 
+Gonad_F0_HL_DSS <- Gonad_F0_HL_subset %>%
+  inner_join(DSS_DMR_subset, by = c("X" = "Feature"))
+
+#Write the table into excel 
+write.xlsx(
+  Gonad_F0_HL_DSS,
+  file = "Meth_Gene Tables/Gonad_F0_HL_DSS.xlsx",
+  rowNames = TRUE
+)
+
+#Liver F1
+Liver_F1 <- read.csv("C:/Users/Jessi/OneDrive/Desktop/Methylation-data/Gene tables/Li_res_s_F1.csv")
+
+Liver_F1_subset <- Liver_F1[, gene_cols]
+
+# 
+Liver_F1_DSS <- Liver_F1_subset %>%
+  inner_join(DSS_DMR_subset, by = c("X" = "Feature"))
+
+#Write the table into excel 
+write.xlsx(
+  Liver_F1_DSS,
+  file = "Meth_Gene Tables/Liver_F1_DSS.xlsx",
+  rowNames = TRUE
+)
+
+#Liver LD
+Liver_F0_LD <- read.csv("C:/Users/Jessi/OneDrive/Desktop/Methylation-data/Gene tables/Li_res_s_LD.csv")
+
+Liver_F0_LD_subset <- Liver_F0_LD[, gene_cols]
+
+Liver_F0_LD_DSS <- Liver_F0_LD_subset %>%
+  inner_join(DSS_DMR_subset, by = c("X" = "Feature"))
+
+#Write the table into excel 
+write.xlsx(
+  Liver_F1_DSS,
+  file = "Meth_Gene Tables/Liver_F0_LD_DSS.xlsx",
+  rowNames = TRUE
+)
