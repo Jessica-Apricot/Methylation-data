@@ -209,8 +209,4 @@ Methylation_comp <- Gonad_HD_DSS %>%
 
 table(Methylation_comp$ExpressionGroup, Methylation_comp$Meth_dir)
 
-cor.test(
-  Methylation_comp$Go_res_s_HD.log2FoldChange,
-  Methylation_comp$diff.Methyl,
-  method = "spearman"
-)
+
