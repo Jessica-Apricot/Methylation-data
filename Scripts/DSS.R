@@ -127,6 +127,8 @@ write.table(dmr25,
             quote = FALSE,
             row.names = FALSE)
 
+
+
 APR_DSS_DMR <- read.table("C:/Users/Jessi/OneDrive/Desktop/Methylation-data/Annotated probe Reports/Annotated Probe Report for DSS_DMR.txt",
           header = TRUE,
           sep = "\t",
@@ -137,6 +139,8 @@ APR_DSS_DMR <- read.table("C:/Users/Jessi/OneDrive/Desktop/Methylation-data/Anno
 colnames(APR_DSS_DMR)
 colnames(Seqmonk_Gonad_F1)
 colnames(dmrs)
+
+### Gonad F0 and F1 ####
 
 #Creating tables with Gonad DEGs and DSS DMRs
 
@@ -215,7 +219,7 @@ table(Methylation_comp$ExpressionGroup, Methylation_comp$Meth_dir)
 ### Lets try with the other samples ###
 
 
-#Brain F1
+### Brain F1 ####
 Brain_F1 <- read.csv("C:/Users/Jessi/OneDrive/Desktop/Methylation-data/Gene tables/Br_res_s_F1.csv")
 
 colnames(Brain_F1)
@@ -238,7 +242,7 @@ write.xlsx(
   rowNames = TRUE
 )
 
-#Brain HD
+### Brain HD ####
 Brain_F0_HD <- read.csv("C:/Users/Jessi/OneDrive/Desktop/Methylation-data/Gene tables/Br_res_s_HD.csv")
 
 
@@ -254,7 +258,7 @@ Brain_F0_HD_subset <- Brain_F0_HD[, gene_cols]
 Brain_F0_HD_DSS <- Brain_F0_HD_subset %>%
   inner_join(DSS_DMR_subset, by = c("X" = "Feature"))
 
-#Gonad HL
+### Gonad HL ####
 Gonad_F0_HL <- read.csv("C:/Users/Jessi/OneDrive/Desktop/Methylation-data/Gene tables/Go_res_s_HL.csv")
 
 
@@ -271,7 +275,7 @@ write.xlsx(
   rowNames = TRUE
 )
 
-#Liver F1
+### Liver F1 ####
 Liver_F1 <- read.csv("C:/Users/Jessi/OneDrive/Desktop/Methylation-data/Gene tables/Li_res_s_F1.csv")
 
 Liver_F1_subset <- Liver_F1[, gene_cols]
@@ -287,7 +291,7 @@ write.xlsx(
   rowNames = TRUE
 )
 
-#Liver LD
+### Liver LD ####
 Liver_F0_LD <- read.csv("C:/Users/Jessi/OneDrive/Desktop/Methylation-data/Gene tables/Li_res_s_LD.csv")
 
 Liver_F0_LD_subset <- Liver_F0_LD[, gene_cols]
